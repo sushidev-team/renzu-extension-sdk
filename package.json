@@ -1,0 +1,45 @@
+{
+  "name": "@renzu/extension-sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Public Renzu extension manifest contracts and standalone tooling",
+  "license": "UNLICENSED",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schema.json": "./dist/schema.json"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "node build.mjs",
+    "prepack": "npm run build",
+    "test": "node --test public.test.mjs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "@types/node": "^24.0.0"
+  },
+  "bin": {
+    "renzu-extension": "./dist/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sushidev-team/renzu-extension-sdk.git"
+  },
+  "homepage": "https://renzu.app/docs/extensions"
+}

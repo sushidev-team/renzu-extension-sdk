@@ -1,0 +1,6 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {validateManifest} from './dist/index.js';
+const starter=JSON.parse(await readFile(new URL('./dist/starter.manifest.json',import.meta.url),'utf8'));
+test('starter is a complete standalone extension',()=>{assert.equal(validateManifest(structuredClone(starter)).id,starter.id);});
+test('executable fields and unapproved capabilities are rejected',()=>{for(const patch of [{script:'alert(1)'},{permissions:[{capability:'shell.exec',resources:['pods']}]},{views:[{...starter.views[0],html:'<script/>'}]}])assert.throws(()=>validateManifest({...structuredClone(starter),...patch}));});
+test('undeclared resources and query references cannot acquire authority',()=>{const a=structuredClone(starter);a.queries[0].resource='secrets';assert.throws(()=>validateManifest(a));const b=structuredClone(starter);b.views[0].widgets[0].query='other';assert.throws(()=>validateManifest(b));});
+test('limits and duplicate identities are enforced',()=>{const a=structuredClone(starter);a.queries.push(a.queries[0]);assert.throws(()=>validateManifest(a));const b=structuredClone(starter);b.description.en='x'.repeat(140000);assert.throws(()=>validateManifest(b));});

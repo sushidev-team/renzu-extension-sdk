@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://renzu.app/extensions/schema/v1.json",
+  "title": "Renzu Extension Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._-]{1,96}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._-]{1,96}$"
+    },
+    "title": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 8,
+      "propertyNames": {
+        "pattern": "^[a-z]{2}$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100
+      }
+    },
+    "description": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 8,
+      "propertyNames": {
+        "pattern": "^[a-z]{2}$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "capability": {
+            "const": "resources.metadata.read"
+          },
+          "resources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/resource"
+            },
+            "minItems": 1,
+            "maxItems": 32
+          }
+        },
+        "required": [
+          "capability",
+          "resources"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "queries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._-]{1,96}$"
+          },
+          "resource": {
+            "$ref": "#/$defs/resource"
+          }
+        },
+        "required": [
+          "id",
+          "resource"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 16
+    },
+    "views": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._-]{1,96}$"
+          },
+          "title": {
+            "type": "object",
+            "minProperties": 1,
+            "maxProperties": 8,
+            "propertyNames": {
+              "pattern": "^[a-z]{2}$"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "icon": {
+            "enum": [
+              "boxes",
+              "database",
+              "network",
+              "shield",
+              "layers",
+              "activity",
+              "settings"
+            ]
+          },
+          "navigation": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "object",
+                "minProperties": 1,
+                "maxProperties": 8,
+                "propertyNames": {
+                  "pattern": "^[a-z]{2}$"
+                },
+                "additionalProperties": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60
+                }
+              },
+              "order": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 255
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "widgets": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "metric",
+                        "resource-table",
+                        "resource-grid",
+                        "open-resource-list"
+                      ]
+                    },
+                    "title": {
+                      "type": "object",
+                      "minProperties": 1,
+                      "maxProperties": 8,
+                      "propertyNames": {
+                        "pattern": "^[a-z]{2}$"
+                      },
+                      "additionalProperties": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                      }
+                    },
+                    "query": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9._-]{1,96}$"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "query"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "const": "text"
+                    },
+                    "body": {
+                      "type": "object",
+                      "minProperties": 1,
+                      "maxProperties": 8,
+                      "propertyNames": {
+                        "pattern": "^[a-z]{2}$"
+                      },
+                      "additionalProperties": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 2000
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "body"
+                  ]
+                }
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 24
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "icon",
+          "widgets"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 12
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "title",
+    "description",
+    "permissions",
+    "queries",
+    "views"
+  ],
+  "$defs": {
+    "resource": {
+      "anyOf": [
+        {
+          "enum": [
+            "pods",
+            "nodes",
+            "deployments",
+            "statefulsets",
+            "daemonsets",
+            "replicasets",
+            "replicationcontrollers",
+            "jobs",
+            "cronjobs",
+            "services",
+            "ingresses",
+            "endpoints",
+            "networkpolicies",
+            "configmaps",
+            "secrets",
+            "horizontalpodautoscalers",
+            "resourcequotas",
+            "limitranges",
+            "poddisruptionbudgets",
+            "persistentvolumeclaims",
+            "persistentvolumes",
+            "storageclasses",
+            "namespaces",
+            "events",
+            "serviceaccounts",
+            "roles",
+            "rolebindings",
+            "clusterroles",
+            "clusterrolebindings",
+            "customresourcedefinitions",
+            "resourceclaims",
+            "resourceclaimtemplates",
+            "deviceclasses"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^crd:[a-z0-9.-]+:[a-z0-9]+:[a-z0-9-]+:[A-Za-z][A-Za-z0-9]*:(ns|cluster)$"
+        }
+      ]
+    }
+  }
+}

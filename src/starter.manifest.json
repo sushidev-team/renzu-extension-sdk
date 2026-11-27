@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "id": "dev.example.my-cockpit",
+  "version": "0.1.0",
+  "title": {
+    "de": "Mein Cockpit",
+    "en": "My cockpit"
+  },
+  "description": {
+    "de": "Pod-Übersicht für meinen Workspace.",
+    "en": "Pod overview for my workspace."
+  },
+  "permissions": [
+    {
+      "capability": "resources.metadata.read",
+      "resources": [
+        "pods"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "id": "pods",
+      "resource": "pods"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": {
+        "de": "Übersicht",
+        "en": "Overview"
+      },
+      "icon": "boxes",
+      "navigation": {
+        "label": {
+          "de": "Mein Cockpit",
+          "en": "My cockpit"
+        },
+        "order": 10
+      },
+      "widgets": [
+        {
+          "type": "metric",
+          "title": {
+            "de": "Pods",
+            "en": "Pods"
+          },
+          "query": "pods"
+        },
+        {
+          "type": "resource-table",
+          "title": {
+            "de": "Pod-Liste",
+            "en": "Pod list"
+          },
+          "query": "pods"
+        }
+      ]
+    }
+  ]
+}
